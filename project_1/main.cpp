@@ -117,7 +117,7 @@ void update() {
     model_monkey = glm::mat4(1.0f);
     model_banana1 = glm::translate(model_banana1, glm::vec3(2.0f, 2.0f, 0.0f));
     model_banana2 = glm::translate(model_banana2, glm::vec3(-2.0f, 2.0f, 0.0f));
-    model_monkey = glm::translate(model_monkey, glm::vec3(0.0f, -3.0f, 0.0f));
+    model_monkey = glm::translate(model_monkey, glm::vec3(0.0f, -4.0f, 0.0f));
 
 
     float ticks = (float)SDL_GetTicks() / 1000.0f;
