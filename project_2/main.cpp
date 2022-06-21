@@ -159,10 +159,14 @@ void process_input() {
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
             case SDLK_UP:
-                player_two_movement.y = 1.0f;
+                if (player_two_position.y < 3.0f) {
+                    player_two_movement.y = 1.0f;
+                }
                 break;
             case SDLK_DOWN:
-                player_two_movement.y = -1.0f;
+                if (player_two_position.y > -3.0f) {
+                    player_two_movement.y = -1.0f;
+                }
                 break;
             case SDLK_w:
                 if (player_one_position.y < 3.0f) {
@@ -170,7 +174,9 @@ void process_input() {
                 }
                 break;
             case SDLK_s:
-                player_one_movement.y = -1.0f;
+                if (player_one_position.y > -3.0f) {
+                    player_one_movement.y = -1.0f;
+                }
                 break;
             case SDLK_q:
                 game_is_running = false;
@@ -185,24 +191,22 @@ void process_input() {
 
     const Uint8* key_states = SDL_GetKeyboardState(NULL);
     if (key_states[SDL_SCANCODE_UP]) {
-        player_two_movement.y = 1.0f;
-    }
-    else if (key_states[SDL_SCANCODE_DOWN]) {
-        player_two_movement.y = -1.0f;
+        if (player_two_position.y < 3.0f) {
+            player_two_movement.y = 1.0f;
+        }
+    } else if (key_states[SDL_SCANCODE_DOWN]) {
+        if (player_two_position.y > -3.0f) {
+            player_two_movement.y = -1.0f;
+        }
     }
     if (key_states[SDL_SCANCODE_W]) {
         if (player_one_position.y < 3.0f) {
             player_one_movement.y = 1.0f;
         }
-    }
-    else if (key_states[SDL_SCANCODE_S]) {
-        player_one_movement.y = -1.0f;
-    }
-    if (glm::length(player_one_movement) > 1.0f) {
-        player_one_movement = glm::normalize(player_one_movement);
-    }
-    if (glm::length(player_two_movement) > 1.0f) {
-        player_two_movement = glm::normalize(player_two_movement);
+    } else if (key_states[SDL_SCANCODE_S]) {
+        if (player_one_position.y > -3.0f) {
+            player_one_movement.y = -1.0f;
+        }
     }
 }
 
