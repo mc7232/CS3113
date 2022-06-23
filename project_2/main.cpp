@@ -27,9 +27,9 @@ enum Coordinate {
 const int WINDOW_WIDTH = 640;
 const int WINDOW_HEIGHT = 480;
 
-const float BG_RED = 0.29f;
-const float BG_GREEN = 0.48f;
-const float BG_BLUE = 0.28f;
+const float BG_RED = 0.0f;
+const float BG_GREEN = 0.0f;
+const float BG_BLUE = 0.0f;
 const float BG_OPACITY = 1.0f;
 
 const int VIEWPORT_X = 0;
@@ -40,11 +40,11 @@ const int VIEWPORT_HEIGHT = WINDOW_HEIGHT;
 const char V_SHADER_PATH[] = "shaders/vertex_textured.glsl";
 const char F_SHADER_PATH[] = "shaders/fragment_textured.glsl";
 
-const char PLAYER_ONE[] = "monkey.png";
-const char PLAYER_TWO[] = "monkey.png";
-const char BALL[] = "banana.png";
+const char PLAYER_ONE[] = "paddle.png";
+const char PLAYER_TWO[] = "paddle.png";
+const char BALL[] = "ball.png";
 
-const float MINIMUM_COLLISION_DISTANCE = 1.0f;
+const float MINIMUM_COLLISION_DISTANCE = 0.5f;
 
 SDL_Window* display_window;
 bool game_is_running = true;
@@ -62,10 +62,10 @@ GLuint ball_texture_id;
 
 SDL_Joystick* player_one_controller;
 
-glm::vec3 player_one_position = glm::vec3(-4.0f, 0.0f, 0.0f);
+glm::vec3 player_one_position = glm::vec3(-4.5f, 0.0f, 0.0f);
 glm::vec3 player_one_movement = glm::vec3(0.0f, 0.0f, 0.0f);
 
-glm::vec3 player_two_position = glm::vec3(4.0f, 0.0f, 0.0f);
+glm::vec3 player_two_position = glm::vec3(4.5f, 0.0f, 0.0f);
 glm::vec3 player_two_movement = glm::vec3(0.0f, 0.0f, 0.0f);
 
 glm::vec3 ball_position = glm::vec3(0.0f);
@@ -194,7 +194,8 @@ void process_input() {
         if (player_two_position.y < 3.0f) {
             player_two_movement.y = 1.0f;
         }
-    } else if (key_states[SDL_SCANCODE_DOWN]) {
+    }
+    else if (key_states[SDL_SCANCODE_DOWN]) {
         if (player_two_position.y > -3.0f) {
             player_two_movement.y = -1.0f;
         }
@@ -203,7 +204,8 @@ void process_input() {
         if (player_one_position.y < 3.0f) {
             player_one_movement.y = 1.0f;
         }
-    } else if (key_states[SDL_SCANCODE_S]) {
+    }
+    else if (key_states[SDL_SCANCODE_S]) {
         if (player_one_position.y > -3.0f) {
             player_one_movement.y = -1.0f;
         }
@@ -226,21 +228,19 @@ void update() {
     if (ball_position.y > 4.0f || ball_position.y < -4.0f) {
         ball_movement.y = -ball_movement.y;
     }
-    if (ball_position.x > 4.0f || ball_position.x < -4.0f) {
+    if (ball_position.x > 5.0f || ball_position.x < -5.0f) {
         game_is_running = false;
     }
     if (check_collision(player_one_position, ball_position)) {
-        ball_movement.y = 1.0f;
-        ball_movement = -ball_movement;
-        if (glm::length(ball_movement) > 1.0f) {
-            ball_movement = glm::normalize(ball_movement);
+        ball_movement.x = -ball_movement.x;
+        if (ball_movement.y < 1.0f && ball_movement.y > -1.0f) {
+            ball_movement.y = 1.0f;
         }
     }
     else if (check_collision(player_two_position, ball_position)) {
-        ball_movement.y = -1.0f;
-        ball_movement = -ball_movement;
-        if (glm::length(ball_movement) > 1.0f) {
-            ball_movement = glm::normalize(ball_movement);
+        ball_movement.x = -ball_movement.x;
+        if (ball_movement.y < 1.0f && ball_movement.y > -1.0f) {
+            ball_movement.y = -1.0f;
         }
     }
 }
@@ -254,8 +254,8 @@ void draw_object(glm::mat4& object_model_matrix, GLuint& object_texture_id) {
 void render() {
     glClear(GL_COLOR_BUFFER_BIT);
     float vertices[] = {
-        -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f,
-        -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f
+       -0.1f, -0.5f, 0.1f, -0.5f, 0.1f, 0.5f,
+       -0.1f, -0.5f, -0.1f, 0.5f, 0.1f, 0.5f
     };
 
     glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);
@@ -271,6 +271,16 @@ void render() {
 
     draw_object(player_one, player_one_texture_id);
     draw_object(player_two, player_two_texture_id);
+
+    float vertices2[] = {
+        -0.2f, -0.2f, 0.2f, -0.2f, 0.2f, 0.2f,
+        -0.2f, -0.2f, 0.2f, 0.2f, -0.2f, 0.2f
+    };
+
+    glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices2);
+    glEnableVertexAttribArray(program.positionAttribute);
+   
+
     draw_object(ball, ball_texture_id);
 
     glDisableVertexAttribArray(program.positionAttribute);
