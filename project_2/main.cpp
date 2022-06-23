@@ -225,7 +225,7 @@ void update() {
     player_one = glm::translate(player_one, player_one_position);
     player_two = glm::translate(player_two, player_two_position);
     ball = glm::translate(ball, ball_position);
-    if (ball_position.y > 4.0f || ball_position.y < -4.0f) {
+    if (ball_position.y > 3.5f || ball_position.y < -3.5f) {
         ball_movement.y = -ball_movement.y;
     }
     if (ball_position.x > 5.0f || ball_position.x < -5.0f) {
