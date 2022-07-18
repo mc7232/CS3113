@@ -49,10 +49,10 @@ const char V_SHADER_PATH[] = "shaders/vertex_textured.glsl",
 
 const float MILLISECONDS_IN_SECOND = 1000.0;
 const int FONTBANK_SIZE = 16;
-const char TARGET[] = "hand.png";
-const char OBS[] = "mizore.png";
-const char PLAYER1[] = "bbird.png";
-const char TEXT[] = "font.png";
+const char TARGET[] = "assets/hand.png";
+const char OBS[] = "assets/mizore.png";
+const char PLAYER1[] = "assets/bbird.png";
+const char TEXT[] = "assets/font.png";
 
 GLuint text_texture_id;
 
@@ -223,7 +223,7 @@ void initialise()
     state.lose->deactivate();
     
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
-    state.bgm = Mix_LoadMUS("bgm.mp3");
+    state.bgm = Mix_LoadMUS("assets/bgm.mp3");
     Mix_PlayMusic(state.bgm, -1);
     Mix_VolumeMusic(MIX_MAX_VOLUME / 4.0f);
     
