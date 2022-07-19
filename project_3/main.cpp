@@ -108,7 +108,7 @@ GLuint load_texture(const char* filepath)
 }
 
 
-void DrawText(ShaderProgram *program, GLuint font_texture_id, std::string text, float screen_size, float spacing, glm::vec3 position)
+void draw_text(ShaderProgram *program, GLuint font_texture_id, std::string text, float screen_size, float spacing, glm::vec3 position)
 {
     float width = 1.0f / FONTBANK_SIZE;
     float height = 1.0f / FONTBANK_SIZE;
@@ -300,10 +300,10 @@ void update()
     if(state.player->collided_left || state.player->collided_right || state.player->get_position().y < -4.5f || state.player->get_position().x < -5.5f || state.player->get_position().x > 5.5f){
         state.lose->activate();
         state.player->deactivate();
-    }else if(state.player->collided_bottom && state.player->get_position().y > -1.0f){
+    }else if((state.player->collided_bottom && state.player->get_position().y > -1.0f) || (state.player->collided_bottom && state.player->get_position().x < 2.25f)){
         state.lose->activate();
         state.player->deactivate();
-    }else if(state.player->collided_bottom && state.player->get_position().y < -1.0f){
+    }else if(state.player->collided_bottom && state.player->get_position().y < -1.0f && state.player->get_position().x >= 2.25f){
         state.win->activate();
         state.player->deactivate();
     //else if(state.player->check_collision(state.target)){
@@ -327,9 +327,9 @@ void render()
     state.platforms[1].render(&program, mizo);
     text_texture_id = load_texture(TEXT);
     if(state.lose->get_active()){
-        DrawText(&program, text_texture_id, "LOSE", 0.8f, 0.5f, glm::vec3(-2.0f, 2.0f, 0.0f));
+        draw_text(&program, text_texture_id, "LOSE", 0.8f, 0.5f, glm::vec3(-2.0f, 1.0f, 0.0f));
     }else if(state.win->get_active()){
-        DrawText(&program, text_texture_id, "WIN", 0.8f, 0.5f, glm::vec3(-1.5f, 2.0f, 0.0f));
+        draw_text(&program, text_texture_id, "WIN", 0.8f, 0.5f, glm::vec3(-1.5f, 1.0f, 0.0f));
     }
     SDL_GL_SwapWindow(display_window);
 }
